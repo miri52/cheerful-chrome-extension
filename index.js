@@ -1,5 +1,6 @@
 const authorEl = document.getElementById("author");
 const cryptoEl = document.getElementById("crypto");
+const timeEl = document.getElementById("time");
 
 const unsplashUrl =
   "https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature";
@@ -31,7 +32,6 @@ fetch(cryptoUrl)
     return res.json();
   })
   .then((data) => {
-    console.log(data);
     let html = `
     <div class="crypto-top">
         <img src=${data.image.thumb} alt=${data.name}/>
@@ -50,3 +50,14 @@ fetch(cryptoUrl)
     console.error(err);
     cryptoEl.textContent = "Crypto info currently unavailable";
   });
+
+function getCurrentTime() {
+  let time = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  timeEl.textContent = time;
+}
+
+let interval = setInterval(getCurrentTime, 1000);
+// clearInterval(interval);
