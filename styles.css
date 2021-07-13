@@ -1,13 +1,50 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
+* {
+  box-sizing: border-box;
 }
 
 body {
+  margin: 0;
   background: no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow: 0px 0px 20px #aaaaaa;
+}
+
+main {
+  height: 100vh;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+
+#crypto {
+  font-size: 1.3rem;
+}
+
+.crypto-top {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.crypto-bottom > p {
+  margin: 0.1em;
+}
+.crypto-name {
+  margin-left: 0.5em;
+}
+
+#time {
+  align-self: center;
 }
