@@ -29,6 +29,7 @@ main {
 
 #crypto {
   font-size: 1.3rem;
+  padding-top: 1.2em;
 }
 
 .crypto-top {
@@ -47,4 +48,30 @@ main {
 
 #time {
   align-self: center;
+}
+
+#weather {
+  display: flex;
+  flex-direction: column;
+}
+
+#weather * {
+  margin: 0;
+}
+
+.weather-top {
+  display: flex;
+  align-items: center;
+  font-size: 2.2rem;
+}
+
+.weather-img {
+  width: 70%;
+  height: 50%;
+  object-fit: cover;
+}
+
+.weather-bottom {
+  align-self: flex-end;
+  font-size: 1.4rem;
 }
