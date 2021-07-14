@@ -76,6 +76,7 @@ navigator.geolocation.getCurrentPosition((position) => {
       const iconDescription = data.weather[0].description;
       const currentTemperature = Math.round(data.main.temp);
       const currentLocationName = data.name;
+
       let html = `
       <div class="weather-top">
         <img class="weather-img" alt="${iconDescription}" src="http://openweathermap.org/img/wn/${iconSrc}@2x.png"/>
@@ -85,6 +86,7 @@ navigator.geolocation.getCurrentPosition((position) => {
         <p>${currentLocationName}</p>
       </div>
       `;
+
       weatherEl.innerHTML = html;
       console.log(data);
     })
