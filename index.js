@@ -1,13 +1,17 @@
+"use strict";
+
 const authorEl = document.getElementById("author");
 const cryptoEl = document.getElementById("crypto");
 const timeEl = document.getElementById("time");
 const weatherEl = document.getElementById("weather");
+const quoteEl = document.getElementById("quote");
 
 const unsplashUrl =
   "https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature";
 const cryptoUrl = "https://api.coingecko.com/api/v3/coins/dogecoin";
 const baseWeatherUrl =
   "https://apis.scrimba.com/openweathermap/data/2.5/weather";
+const randomQuoteUrl = "https://api.quotable.io/random";
 
 fetch(unsplashUrl)
   .then((res) => {
@@ -34,7 +38,7 @@ fetch(cryptoUrl)
     return res.json();
   })
   .then((data) => {
-    let html = `
+    const html = `
     <div class="crypto-top">
         <img src=${data.image.thumb} alt="${data.name}"/>
         <span class="crypto-name">${data.name}</span>
@@ -77,7 +81,7 @@ navigator.geolocation.getCurrentPosition((position) => {
       const currentTemperature = Math.round(data.main.temp);
       const currentLocationName = data.name;
 
-      let html = `
+      const html = `
       <div class="weather-top">
         <img class="weather-img" alt="${iconDescription}" src="http://openweathermap.org/img/wn/${iconSrc}@2x.png"/>
         <p>${currentTemperature}°</p>
@@ -88,7 +92,22 @@ navigator.geolocation.getCurrentPosition((position) => {
       `;
 
       weatherEl.innerHTML = html;
-      console.log(data);
     })
     .catch((err) => console.error(err));
 });
+
+fetch(randomQuoteUrl)
+  .then((res) => {
+    if (!res.ok) throw new Error(`Quote not found`);
+    return res.json();
+  })
+  .then((data) => {
+    console.log(data);
+    const quote = data.content;
+    const author = data.author;
+    const html = `
+    <h2 class="quoteText">"${quote}"</h2>
+    <p class="quoteAuthor">${author}</p>
+    `;
+    quoteEl.innerHTML = html;
+  });
