@@ -5,6 +5,9 @@ const cryptoEl = document.getElementById("crypto");
 const timeEl = document.getElementById("time");
 const weatherEl = document.getElementById("weather");
 const quoteEl = document.getElementById("quote");
+const formEl = document.getElementById("focus-form");
+const focusTitle = document.querySelector(".daily-focus-title");
+const focusInput = document.querySelector(".daily-focus-input");
 
 const unsplashUrl =
   "https://apis.scrimba.com/unsplash/photos/random?orientation=landscape&query=nature";
@@ -23,13 +26,13 @@ fetch(unsplashUrl)
     const author = data.user.name;
     console.log(author, imgUrl);
     document.body.style.backgroundImage = `url(${imgUrl})`;
-    authorEl.textContent = `By: ${author}`;
+    authorEl.textContent = `Image by: ${author}`;
   })
   .catch((err) => {
     console.error(`Something went wrong 😱 ${err}`);
     document.body.style.backgroundImage =
       'url("https://images.unsplash.com/38/L2NfDz5SOm7Gbf755qpw_DSCF0490.jpg?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTEwMjl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYxNzgwMDk&ixlib=rb-1.2.1&q=85")';
-    authorEl.textContent = "By: Tyssul Patel";
+    authorEl.textContent = "Image by: Tyssul Patel";
   });
 
 fetch(cryptoUrl)
@@ -106,8 +109,21 @@ fetch(randomQuoteUrl)
     const quote = data.content;
     const author = data.author;
     const html = `
-    <h2 class="quoteText">"${quote}"</h2>
-    <p class="quoteAuthor">${author}</p>
+    <h2 class="quote-text">"${quote}"</h2>
+    <p class="quote-author">${author}</p>
     `;
     quoteEl.innerHTML = html;
-  });
+  })
+  .catch((err) => console.error(err));
+
+function displayDailyFocus(e) {
+  e.preventDefault();
+  console.log(focusInput.value);
+  focusTitle.textContent = `Your today's main focus`;
+  focusTitle.style.textTransform = "uppercase";
+  const submittedFocus = document.createElement("h3");
+  submittedFocus.textContent = focusInput.value;
+  formEl.replaceChild(submittedFocus, focusInput);
+}
+
+formEl.addEventListener("submit", displayDailyFocus);

@@ -82,10 +82,31 @@ main {
   margin: 0;
 }
 
-.quoteText {
-  font-size: 1.9rem;
+#quote {
+  margin-bottom: 3em;
 }
 
-.quoteAuthor {
+.quote-text {
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+.quote-author {
   font-size: 1.2rem;
+}
+
+.daily-focus-title {
+  font-size: 1.9rem;
+  font-weight: 600;
+}
+
+.daily-focus-input {
+  border: none;
+  background: transparent;
+  border-bottom: 3px solid #fff;
+  width: 500px;
+  height: 35px;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
 }
