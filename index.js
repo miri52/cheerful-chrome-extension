@@ -78,14 +78,33 @@ navigator.geolocation.getCurrentPosition((position) => {
       return res.json();
     })
     .then((data) => {
-      const iconSrc = data.weather[0].icon;
+      console.log(data);
       const iconDescription = data.weather[0].description;
       const currentTemperature = Math.round(data.main.temp);
       const currentLocationName = data.name;
 
+      let icon;
+      switch (data.weather[0].icon) {
+        case "01d":
+          icon = `<i class="fas fa-sun weather-icon"></i>`;
+          break;
+        case "02d":
+          icon = `<i class="fas fa-cloud-sun weather-icon"></i>`;
+          break;
+        case "10d":
+          icon = `<i class="fas fa-cloud-sun-rain weather-icon"></i>`;
+          break;
+        default:
+          icon = `<img
+            class="weather-img"
+            alt="${iconDescription}"
+            src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"
+          />`;
+      }
+
       const html = `
       <div class="weather-top">
-        <img class="weather-img" alt="${iconDescription}" src="http://openweathermap.org/img/wn/${iconSrc}@2x.png"/>
+        ${icon}
         <p>${currentTemperature}°</p>
         </div>
       <div class="weather-bottom">
@@ -104,7 +123,6 @@ fetch(randomQuoteUrl)
     return res.json();
   })
   .then((data) => {
-    console.log(data);
     const quote = data.content;
     const author = data.author;
     const html = `

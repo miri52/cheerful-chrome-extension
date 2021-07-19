@@ -67,6 +67,10 @@ main {
   object-fit: cover;
 }
 
+.weather-icon {
+  padding: 0.2em;
+}
+
 .weather-bottom {
   align-self: flex-end;
   font-size: 2rem;
