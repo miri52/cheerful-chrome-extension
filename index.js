@@ -18,26 +18,25 @@ const randomQuoteUrl = "https://api.quotable.io/random";
 
 fetch(unsplashUrl)
   .then((res) => {
-    if (!res.ok) throw new Error(`Oopsie doopsie: ${res.status}`);
+    if (!res.ok) throw new Error(`Couldn't get an image: ${res.status}`);
     return res.json();
   })
   .then((data) => {
     const imgUrl = data.urls.full;
     const author = data.user.name;
     console.log(author, imgUrl);
-    document.body.style.backgroundImage = `url(${imgUrl})`;
+    document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.527), rgba(0, 0, 0, 0.1)), url(${imgUrl})`;
     authorEl.textContent = `Image by: ${author}`;
   })
   .catch((err) => {
     console.error(`Something went wrong 😱 ${err}`);
-    document.body.style.backgroundImage =
-      'url("https://images.unsplash.com/38/L2NfDz5SOm7Gbf755qpw_DSCF0490.jpg?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTEwMjl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYxNzgwMDk&ixlib=rb-1.2.1&q=85")';
+    document.body.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.527), rgba(0, 0, 0, 0.1)), url("https://images.unsplash.com/38/L2NfDz5SOm7Gbf755qpw_DSCF0490.jpg?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTEwMjl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2MjYxNzgwMDk&ixlib=rb-1.2.1&q=85")`;
     authorEl.textContent = "Image by: Tyssul Patel";
   });
 
 fetch(cryptoUrl)
   .then((res) => {
-    if (!res.ok) throw new Error(`Oopsie doopsie: ${res.status}`);
+    if (!res.ok) throw new Error(`Couldn't get crypt data: ${res.status}`);
     return res.json();
   })
   .then((data) => {
@@ -116,14 +115,50 @@ fetch(randomQuoteUrl)
   })
   .catch((err) => console.error(err));
 
-function displayDailyFocus(e) {
+function setDailyFocus(e) {
   e.preventDefault();
-  console.log(focusInput.value);
-  focusTitle.textContent = `Your today's main focus`;
-  focusTitle.style.textTransform = "uppercase";
-  const submittedFocus = document.createElement("h3");
-  submittedFocus.textContent = focusInput.value;
-  formEl.replaceChild(submittedFocus, focusInput);
+  setWithExpiry(`Your today's main focus`, focusInput.value);
+  showDailyFocus();
 }
 
-formEl.addEventListener("submit", displayDailyFocus);
+function showDailyFocus() {
+  const focusValue = getWithExpiry(`Your today's main focus`);
+  if (!focusValue) return;
+  const submittedFocus = document.createElement("h3");
+  submittedFocus.classList.add("daily-focus-value");
+  submittedFocus.textContent = focusValue;
+  formEl.replaceChild(submittedFocus, focusInput);
+  focusTitle.textContent = `Your today's main focus`;
+  focusTitle.style.textTransform = "uppercase";
+  focusTitle.style.textDecoration = "underline";
+}
+
+showDailyFocus();
+
+formEl.addEventListener("submit", setDailyFocus);
+
+// Storing data - localStorage
+
+function setWithExpiry(key, value) {
+  const midnight = new Date();
+  midnight.setHours(23, 59, 59, 0);
+  const midnightTimestamp = midnight.getTime();
+  const item = {
+    value,
+    expiry: midnightTimestamp,
+  };
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+function getWithExpiry(key) {
+  const itemStr = localStorage.getItem(key);
+  if (!itemStr) return null;
+  const item = JSON.parse(itemStr);
+  const now = new Date();
+  const timestampNow = now.getTime();
+  if (timestampNow > item.expiry) {
+    localStorage.removeItem(key);
+    return null;
+  }
+  return item.value;
+}
