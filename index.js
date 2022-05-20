@@ -68,9 +68,17 @@ function getCurrentTime() {
 }
 
 let interval = setInterval(getCurrentTime, 1000);
-// clearInterval(interval);
+clearInterval(interval);
 
-navigator.geolocation.getCurrentPosition((position) => {
+// weather data
+
+const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+function weatherSuccess(position) {
   const { latitude, longitude } = position.coords;
   fetch(`${baseWeatherUrl}?lat=${latitude}&lon=${longitude}&units=metric`)
     .then((res) => {
@@ -78,33 +86,18 @@ navigator.geolocation.getCurrentPosition((position) => {
       return res.json();
     })
     .then((data) => {
-      console.log(data);
       const iconDescription = data.weather[0].description;
       const currentTemperature = Math.round(data.main.temp);
       const currentLocationName = data.name;
-
-      let icon;
-      switch (data.weather[0].icon) {
-        case "01d":
-          icon = `<i class="fas fa-sun weather-icon"></i>`;
-          break;
-        case "02d":
-          icon = `<i class="fas fa-cloud-sun weather-icon"></i>`;
-          break;
-        case "10d":
-          icon = `<i class="fas fa-cloud-sun-rain weather-icon"></i>`;
-          break;
-        default:
-          icon = `<img
-            class="weather-img"
-            alt="${iconDescription}"
-            src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"
-          />`;
-      }
+      const icon = data.weather[0].icon;
 
       const html = `
       <div class="weather-top">
-        ${icon}
+      <img
+            class="weather-img"
+            alt="${iconDescription}"
+            src="http://openweathermap.org/img/wn/${icon}@2x.png"
+          />
         <p>${currentTemperature}°</p>
         </div>
       <div class="weather-bottom">
@@ -115,7 +108,13 @@ navigator.geolocation.getCurrentPosition((position) => {
       weatherEl.innerHTML = html;
     })
     .catch((err) => console.error(err));
-});
+}
+
+function weatherError(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+navigator.geolocation.getCurrentPosition(weatherSuccess, weatherError, options);
 
 fetch(randomQuoteUrl)
   .then((res) => {
